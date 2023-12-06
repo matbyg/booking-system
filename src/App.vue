@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// import 'primevue/resources/themes/lara-light-green/theme.css'
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
@@ -9,6 +10,8 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
+
+      <PrimeButton>Test</PrimeButton>
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
