@@ -1,23 +1,37 @@
 <script setup lang="ts">
-// import 'primevue/resources/themes/lara-light-green/theme.css'
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+
+interface Booking {
+  id: string
+  guestName: string
+  checkInDate: string
+  checkOutDate: string
+}
+
+const dummyBookings: Booking[] = [
+  {
+    id: '001',
+    guestName: 'Bertil',
+    checkInDate: 'Tue Dec 19 2023 00:00:00 GMT+0100 (Central European Standard Time)',
+    checkOutDate: 'Sat Dec 23 2023 00:00:00 GMT+0100 (Central European Standard Time)'
+  },
+  {
+    id: '002',
+    guestName: 'Sven',
+    checkInDate: 'Tue Dec 24 2023 00:00:00 GMT+0100 (Central European Standard Time)',
+    checkOutDate: 'Sat Dec 25 2023 00:00:00 GMT+0100 (Central European Standard Time)'
+  }
+]
+
+localStorage.setItem('dummy-bookings', JSON.stringify(dummyBookings))
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <PrimeButton>Test</PrimeButton>
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
+    </nav>
   </header>
 
   <RouterView />
@@ -25,64 +39,27 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: #000;
 }
 
 nav a.router-link-exact-active:hover {
-  background-color: transparent;
 }
 
 nav a {
   display: inline-block;
+  text-decoration: none;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  border-left: 1px solid #ccc;
+  color: rgb(84, 46, 255);
 }
 
 nav a:first-of-type {
   border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>
