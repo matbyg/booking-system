@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 
 /** PRIME VUE */
 import PrimeVue from 'primevue/config'
+import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import Calendar from 'primevue/calendar'
 
@@ -18,6 +19,7 @@ app.use(router)
 
 /** PRIME VUE */
 app.use(PrimeVue)
+app.component('PrimeInput', InputText)
 app.component('PrimeButton', Button)
 app.component('PrimeCalendar', Calendar)
 

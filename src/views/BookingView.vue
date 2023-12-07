@@ -10,7 +10,7 @@ interface Reservation {
 
 const minDate = ref(new Date())
 const searchDateSpan = ref(null)
-// const guestName = ref('')
+const guestName = ref('Dummy')
 
 const checkInDate = computed<Date | null>(() => {
   if (searchDateSpan.value) return searchDateSpan.value[0]
@@ -23,7 +23,7 @@ const checkOutDate = computed<Date | null>(() => {
 })
 
 const disableSearchButton = computed<boolean>(() => {
-  if (!checkInDate.value || !checkOutDate.value) return true
+  if (!checkInDate.value || !checkOutDate.value || !guestName.value) return true
   return false
 })
 
@@ -33,7 +33,8 @@ function checkDateAvailability(): void {
 
   if (!parsedReservations) return
 
-  parsedReservations.forEach((reservation: Reservation) => {
+  parsedReservations.every((reservation: Reservation) => {
+    console.log(reservation.id)
     const hasCollision =
       checkInDate.value && checkOutDate.value
         ? areDateRangesColliding(
@@ -65,29 +66,30 @@ function areDateRangesColliding(
 
 <template>
   <main>
-    <h2>Choose the date for your visit</h2>
-    <PrimeCalendar v-model="searchDateSpan" inline :minDate="minDate" selectionMode="range" />
+    <section>
+      <p>Please enter your name</p>
+      <PrimeInput type="text" v-model="guestName" />
+    </section>
 
-    <div class="search-button-wrapper">
-      <PrimeButton
-        aria-label="Search"
-        :disabled="disableSearchButton"
-        @click="checkDateAvailability()"
-      >
-        Make reservation
-      </PrimeButton>
-    </div>
+    <section>
+      <p>Choose the date for your visit</p>
+      <PrimeCalendar v-model="searchDateSpan" inline :minDate="minDate" selectionMode="range" />
 
-    <!-- <div class="result-list-wrapper">
-      <h2>Tillgängliga rum</h2>
-      {{ checkInDate }}
-      {{ checkOutDate }}
-    </div> -->
+      <div class="search-button-wrapper">
+        <PrimeButton
+          aria-label="Search"
+          :disabled="disableSearchButton"
+          @click="checkDateAvailability()"
+        >
+          Make reservation
+        </PrimeButton>
+      </div>
+    </section>
   </main>
 </template>
 
 <style scoped>
-main {
+section {
   display: flex;
   flex-direction: column;
   justify-content: center;
