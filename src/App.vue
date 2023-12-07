@@ -28,38 +28,45 @@ localStorage.setItem('dummy-bookings', JSON.stringify(dummyBookings))
 
 <template>
   <header>
-    <nav>
+    <h1>Booking System Sample</h1>
+    <!-- <nav>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
-    </nav>
+    </nav> -->
   </header>
 
   <RouterView />
 </template>
 
-<style scoped>
+<style>
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
 header {
   display: flex;
   justify-content: center;
   padding: 1rem 0;
+  color: rgb(63, 81, 181);
+  border-bottom: 1px solid #ccc;
 }
 
-nav a.router-link-exact-active {
+/* nav a.router-link-exact-active {
   color: #000;
-}
+} */
 
-nav a.router-link-exact-active:hover {
-}
-
-nav a {
+/* nav a {
   display: inline-block;
   text-decoration: none;
   padding: 0 1rem;
   border-left: 1px solid #ccc;
   color: rgb(84, 46, 255);
-}
+} */
 
-nav a:first-of-type {
+/* nav a:first-of-type {
   border: 0;
-}
+} */
 </style>
