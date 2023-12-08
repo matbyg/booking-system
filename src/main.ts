@@ -8,6 +8,7 @@ import PrimeVue from 'primevue/config'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import Calendar from 'primevue/calendar'
+import Dialog from 'primevue/dialog'
 
 import App from './App.vue'
 import router from './router'
@@ -22,5 +23,6 @@ app.use(PrimeVue)
 app.component('PrimeInput', InputText)
 app.component('PrimeButton', Button)
 app.component('PrimeCalendar', Calendar)
+app.component('PrimeDialog', Dialog)
 
 app.mount('#app')

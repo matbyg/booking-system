@@ -26,10 +26,10 @@ localStorage.setItem('reservations', JSON.stringify(dummyReservations))
 <template>
   <header>
     <h1>Booking System Sample</h1>
-    <!-- <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav> -->
+    <nav>
+      <RouterLink to="/">Booking page</RouterLink>
+      <RouterLink to="/admin">Admin page</RouterLink>
+    </nav>
   </header>
 
   <RouterView />
@@ -44,26 +44,24 @@ localStorage.setItem('reservations', JSON.stringify(dummyReservations))
 }
 
 header {
-  display: flex;
-  justify-content: center;
   padding: 1rem 0;
   color: rgb(63, 81, 181);
   border-bottom: 1px solid #ccc;
+  text-align: center;
 }
 
-/* nav a.router-link-exact-active {
+nav a.router-link-exact-active {
   color: #000;
-} */
-
-/* nav a {
+}
+nav a {
   display: inline-block;
   text-decoration: none;
   padding: 0 1rem;
   border-left: 1px solid #ccc;
-  color: rgb(84, 46, 255);
-} */
+  color: rgb(63, 81, 181);
+}
 
-/* nav a:first-of-type {
+nav a:first-of-type {
   border: 0;
-} */
+}
 </style>

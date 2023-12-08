@@ -7,50 +7,53 @@ import { ref, computed } from 'vue'
 //   checkOutDate: string
 // }
 
-const minDate = ref(new Date())
-const searchDateSpan = ref(null)
 const guestName = ref('Dummy')
-// const showModal = ref(false)
+const searchDateSpan = ref([])
+const minDate = ref(new Date())
 
-const checkInDate = computed<Date | null>(() => {
+const checkInDate = computed<Date | undefined>(() => {
   if (searchDateSpan.value) return searchDateSpan.value[0]
-  return null
+  return undefined
 })
 
-const checkOutDate = computed<Date | null>(() => {
+const checkOutDate = computed<Date | undefined>(() => {
   if (searchDateSpan.value) return searchDateSpan.value[1]
-  return null
+  return undefined
 })
 
-const disableSearchButton = computed<boolean>(() => {
-  if (!checkInDate.value || !checkOutDate.value || !guestName.value) return true
-  return false
-})
-
-function checkDateAvailability(): boolean {
-  if (!guestName.value || !checkInDate.value || !checkOutDate.value) return false
-
+function checkDateAvailability(userCheckIn: Date, userCheckOut: Date): boolean {
   const reservations = localStorage.getItem('reservations')
   const parsedReservations = reservations ? JSON.parse(reservations) : null
-
-  if (!parsedReservations) return true
-
-  for (const reservation of parsedReservations) {
-    if (
-      !(
-        checkOutDate.value < new Date(reservation.checkInDate) ||
-        checkInDate.value > new Date(reservation.checkOutDate)
-      )
-    ) {
-      return false
+  if (parsedReservations) {
+    for (const reservation of parsedReservations) {
+      if (
+        !(
+          userCheckOut < new Date(reservation.checkInDate) ||
+          userCheckIn > new Date(reservation.checkOutDate)
+        )
+      ) {
+        return false
+      }
     }
   }
   return true
 }
 
+const showConfirmationModal = ref(false)
+const showDeclineModal = ref(false)
+
 function requestReservation(): void {
-  const isAvailable = checkDateAvailability()
-  console.log(isAvailable)
+  const isAvailable =
+    checkInDate.value && checkOutDate.value
+      ? checkDateAvailability(checkInDate.value, checkOutDate.value)
+      : false
+
+  if (!isAvailable) {
+    showDeclineModal.value = true
+    return
+  }
+
+  showConfirmationModal.value = true
 }
 
 // function makeReservation(guestName: string, userCheckIn: Date, userCheckOut: Date): void {
@@ -61,6 +64,18 @@ function requestReservation(): void {
 //   }
 //   localStorage.setItem('reservations', JSON.stringify(newReservation))
 // }
+
+const disableSearchButton = computed<boolean>(() => {
+  if (!checkInDate.value || !checkOutDate.value || !guestName.value) return true
+  return false
+})
+
+const localeOptions: Intl.DateTimeFormatOptions = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+}
 </script>
 
 <template>
@@ -84,6 +99,36 @@ function requestReservation(): void {
         </PrimeButton>
       </div>
     </section>
+
+    <PrimeDialog
+      v-model:visible="showConfirmationModal"
+      :style="{ width: '40rem' }"
+      :header="`Thank you ${guestName} for your reservation!`"
+      :draggable="false"
+      modal
+    >
+      <p>You have successfully made a reservation for the following dates.</p>
+      <p>
+        {{ checkInDate?.toLocaleDateString('en-US', localeOptions) }} →
+        {{ checkOutDate?.toLocaleDateString('en-US', localeOptions) }}
+      </p>
+      <template #footer>
+        <PrimeButton aria-label="Close" @click="showConfirmationModal = false">Okay</PrimeButton>
+      </template>
+    </PrimeDialog>
+
+    <PrimeDialog
+      v-model:visible="showDeclineModal"
+      :style="{ width: '40rem' }"
+      header="Your reservation is not possible"
+      :draggable="false"
+      modal
+    >
+      <p>
+        The dates you have chosen are unavailable. Please choose another period of time for your
+        visit.
+      </p>
+    </PrimeDialog>
   </main>
 </template>
 
