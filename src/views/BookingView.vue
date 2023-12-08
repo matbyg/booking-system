@@ -38,14 +38,14 @@ function checkDateAvailability(userCheckIn: Date, userCheckOut: Date): boolean {
   return true
 }
 
-const showConfirmationModal = ref(false)
-const showDeclineModal = ref(false)
+const isConfirmationModalVisible = ref(false)
+const isDeclineModalVisible = ref(false)
 
 function requestReservation(): void {
   const isAvailable = checkDateAvailability(checkInDate.value, checkOutDate.value)
 
   if (!isAvailable) {
-    showDeclineModal.value = true
+    isDeclineModalVisible.value = true
     return
   }
 
@@ -54,7 +54,7 @@ function requestReservation(): void {
     checkInDate: formatDate(checkInDate.value),
     checkOutDate: formatDate(checkOutDate.value)
   })
-  showConfirmationModal.value = true
+  isConfirmationModalVisible.value = true
 }
 
 function addReservation(newReservation: Reservation): void {
@@ -113,7 +113,7 @@ const localeOptions: Intl.DateTimeFormatOptions = {
     </section>
 
     <PrimeDialog
-      v-model:visible="showConfirmationModal"
+      v-model:visible="isConfirmationModalVisible"
       :style="{ width: '40rem' }"
       :header="`Thank you ${guestName} for your reservation!`"
       :draggable="false"
@@ -122,16 +122,18 @@ const localeOptions: Intl.DateTimeFormatOptions = {
       <p>You have successfully made a reservation for the following dates.</p>
       <p>
         From
-        <strong>{{ checkInDate.toLocaleDateString('en-US', localeOptions) }}</strong> to
-        <strong>{{ checkOutDate.toLocaleDateString('en-US', localeOptions) }}</strong>
+        <strong>{{ formatDate(checkInDate) }}</strong> to
+        <strong>{{ formatDate(checkOutDate) }}</strong>
       </p>
       <template #footer>
-        <PrimeButton aria-label="Close" @click="showConfirmationModal = false">Done</PrimeButton>
+        <PrimeButton aria-label="Close" @click="isConfirmationModalVisible = false">
+          Done
+        </PrimeButton>
       </template>
     </PrimeDialog>
 
     <PrimeDialog
-      v-model:visible="showDeclineModal"
+      v-model:visible="isDeclineModalVisible"
       :style="{ width: '40rem' }"
       header="Your reservation is not possible"
       :draggable="false"
