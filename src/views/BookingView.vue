@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-// interface Reservation {
-//   guestName: string
-//   checkInDate: string
-//   checkOutDate: string
-// }
+interface Reservation {
+  guestName: string
+  checkInDate: string
+  checkOutDate: string
+}
 
-const guestName = ref('Dummy')
+const guestName = ref('')
 const searchDateSpan = ref([])
 const minDate = ref(new Date())
 
@@ -43,27 +43,33 @@ const showConfirmationModal = ref(false)
 const showDeclineModal = ref(false)
 
 function requestReservation(): void {
-  const isAvailable =
-    checkInDate.value && checkOutDate.value
-      ? checkDateAvailability(checkInDate.value, checkOutDate.value)
-      : false
+  if (checkInDate.value && checkOutDate.value) {
+    const isAvailable = checkDateAvailability(checkInDate.value, checkOutDate.value)
 
-  if (!isAvailable) {
-    showDeclineModal.value = true
-    return
+    if (!isAvailable) {
+      showDeclineModal.value = true
+      return
+    }
+
+    addReservation({
+      guestName: guestName.value,
+      checkInDate: checkInDate.value.toLocaleString('en-US', localeOptions),
+      checkOutDate: checkOutDate.value.toLocaleString('en-US', localeOptions)
+    })
+    showConfirmationModal.value = true
   }
-
-  showConfirmationModal.value = true
 }
 
-// function makeReservation(guestName: string, userCheckIn: Date, userCheckOut: Date): void {
-//   const newReservation: Reservation = {
-//     guestName,
-//     checkInDate: JSON.stringify(userCheckIn),
-//     checkOutDate: JSON.stringify(userCheckOut)
-//   }
-//   localStorage.setItem('reservations', JSON.stringify(newReservation))
-// }
+function addReservation(newReservation: Reservation): void {
+  console.log(newReservation)
+  const existingReservationsJSON = localStorage.getItem('reservations')
+  const existingReservations: Reservation[] = existingReservationsJSON
+    ? JSON.parse(existingReservationsJSON)
+    : []
+  existingReservations.push(newReservation)
+  const updatedReservationsJSON = JSON.stringify(existingReservations)
+  localStorage.setItem('reservations', updatedReservationsJSON)
+}
 
 const disableSearchButton = computed<boolean>(() => {
   if (!checkInDate.value || !checkOutDate.value || !guestName.value) return true

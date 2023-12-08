@@ -1,26 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-
-interface Reservation {
-  guestName: string
-  checkInDate: string
-  checkOutDate: string
-}
-
-const dummyReservations: Reservation[] = [
-  {
-    guestName: 'Bertil',
-    checkInDate: 'Tue Dec 19 2023 00:00:00 GMT+0100 (Central European Standard Time)',
-    checkOutDate: 'Sat Dec 23 2023 00:00:00 GMT+0100 (Central European Standard Time)'
-  },
-  {
-    guestName: 'Sven',
-    checkInDate: 'Tue Dec 24 2023 00:00:00 GMT+0100 (Central European Standard Time)',
-    checkOutDate: 'Sat Dec 25 2023 00:00:00 GMT+0100 (Central European Standard Time)'
-  }
-]
-
-localStorage.setItem('reservations', JSON.stringify(dummyReservations))
 </script>
 
 <template>
