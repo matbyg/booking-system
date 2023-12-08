@@ -2,7 +2,6 @@
 import { RouterLink, RouterView } from 'vue-router'
 
 interface Reservation {
-  id: string
   guestName: string
   checkInDate: string
   checkOutDate: string
@@ -10,13 +9,11 @@ interface Reservation {
 
 const dummyReservations: Reservation[] = [
   {
-    id: '001',
     guestName: 'Bertil',
     checkInDate: 'Tue Dec 19 2023 00:00:00 GMT+0100 (Central European Standard Time)',
     checkOutDate: 'Sat Dec 23 2023 00:00:00 GMT+0100 (Central European Standard Time)'
   },
   {
-    id: '002',
     guestName: 'Sven',
     checkInDate: 'Tue Dec 24 2023 00:00:00 GMT+0100 (Central European Standard Time)',
     checkOutDate: 'Sat Dec 25 2023 00:00:00 GMT+0100 (Central European Standard Time)'

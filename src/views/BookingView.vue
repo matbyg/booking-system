@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 
-interface Reservation {
-  id: string
-  guestName: string
-  checkInDate: string
-  checkOutDate: string
-}
+// interface Reservation {
+//   guestName: string
+//   checkInDate: string
+//   checkOutDate: string
+// }
 
 const minDate = ref(new Date())
 const searchDateSpan = ref(null)
 const guestName = ref('Dummy')
+// const showModal = ref(false)
 
 const checkInDate = computed<Date | null>(() => {
   if (searchDateSpan.value) return searchDateSpan.value[0]
@@ -27,41 +27,40 @@ const disableSearchButton = computed<boolean>(() => {
   return false
 })
 
-function checkDateAvailability(): void {
+function checkDateAvailability(): boolean {
+  if (!guestName.value || !checkInDate.value || !checkOutDate.value) return false
+
   const reservations = localStorage.getItem('reservations')
   const parsedReservations = reservations ? JSON.parse(reservations) : null
 
-  if (!parsedReservations) return
+  if (!parsedReservations) return true
 
-  parsedReservations.every((reservation: Reservation) => {
-    console.log(reservation.id)
-    const hasCollision =
-      checkInDate.value && checkOutDate.value
-        ? areDateRangesColliding(
-            checkInDate.value,
-            checkOutDate.value,
-            new Date(reservation.checkInDate),
-            new Date(reservation.checkOutDate)
-          )
-        : null
-
-    if (hasCollision) console.log('your reservation is not possible')
-    if (!hasCollision) console.log('available!')
-  })
-}
-
-function areDateRangesColliding(
-  userCheckIn: Date,
-  userCheckOut: Date,
-  reservationCheckIn: Date,
-  reservationCheckOut: Date
-): boolean {
-  if (userCheckOut < reservationCheckIn || userCheckIn > reservationCheckOut) {
-    return false
-  } else {
-    return true
+  for (const reservation of parsedReservations) {
+    if (
+      !(
+        checkOutDate.value < new Date(reservation.checkInDate) ||
+        checkInDate.value > new Date(reservation.checkOutDate)
+      )
+    ) {
+      return false
+    }
   }
+  return true
 }
+
+function requestReservation(): void {
+  const isAvailable = checkDateAvailability()
+  console.log(isAvailable)
+}
+
+// function makeReservation(guestName: string, userCheckIn: Date, userCheckOut: Date): void {
+//   const newReservation: Reservation = {
+//     guestName,
+//     checkInDate: JSON.stringify(userCheckIn),
+//     checkOutDate: JSON.stringify(userCheckOut)
+//   }
+//   localStorage.setItem('reservations', JSON.stringify(newReservation))
+// }
 </script>
 
 <template>
@@ -79,7 +78,7 @@ function areDateRangesColliding(
         <PrimeButton
           aria-label="Search"
           :disabled="disableSearchButton"
-          @click="checkDateAvailability()"
+          @click="requestReservation()"
         >
           Make reservation
         </PrimeButton>
