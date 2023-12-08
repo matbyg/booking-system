@@ -86,6 +86,7 @@ const localeOptions: Intl.DateTimeFormatOptions = {
 
 <template>
   <main>
+    <h2>Make your reservation</h2>
     <section>
       <label for="guest-name" class="required">Please enter your name</label>
       <PrimeInput type="text" id="guest-name" v-model="guestName" />
