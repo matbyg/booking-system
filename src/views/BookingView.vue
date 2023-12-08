@@ -86,8 +86,20 @@ const localeOptions: Intl.DateTimeFormatOptions = {
     </section>
 
     <section>
-      <p>Choose the date for your visit</p>
-      <PrimeCalendar v-model="searchDateSpan" inline :minDate="minDate" selectionMode="range" />
+      <p>Select a check in and check out date</p>
+      <PrimeCalendar
+        v-model="searchDateSpan"
+        locale="en"
+        inline
+        :minDate="minDate"
+        selectionMode="range"
+      />
+
+      <div v-if="checkInDate" class="address-summary">
+        <strong>Selected dates</strong>
+        {{ checkInDate?.toLocaleDateString('en-US', localeOptions) }} →
+        {{ checkOutDate?.toLocaleDateString('en-US', localeOptions) }}
+      </div>
 
       <div class="search-button-wrapper">
         <PrimeButton
@@ -109,11 +121,12 @@ const localeOptions: Intl.DateTimeFormatOptions = {
     >
       <p>You have successfully made a reservation for the following dates.</p>
       <p>
-        {{ checkInDate?.toLocaleDateString('en-US', localeOptions) }} →
-        {{ checkOutDate?.toLocaleDateString('en-US', localeOptions) }}
+        From
+        <strong>{{ checkInDate?.toLocaleDateString('en-US', localeOptions) }}</strong> to
+        <strong>{{ checkOutDate?.toLocaleDateString('en-US', localeOptions) }}</strong>
       </p>
       <template #footer>
-        <PrimeButton aria-label="Close" @click="showConfirmationModal = false">Okay</PrimeButton>
+        <PrimeButton aria-label="Close" @click="showConfirmationModal = false">Done</PrimeButton>
       </template>
     </PrimeDialog>
 
@@ -141,11 +154,18 @@ section {
 }
 .search-button-wrapper {
   display: flex;
-  justify-content: end;
-  margin-top: 1rem;
 
   button {
+    margin-top: 1rem;
     font-size: 1.125rem;
   }
+}
+.address-summary {
+  margin-top: 1rem;
+  background: #f4f1f1;
+  font-size: 0.875rem;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
 }
 </style>

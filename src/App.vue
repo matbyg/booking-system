@@ -45,7 +45,6 @@ localStorage.setItem('reservations', JSON.stringify(dummyReservations))
 
 header {
   padding: 1rem 0;
-  color: rgb(63, 81, 181);
   border-bottom: 1px solid #ccc;
   text-align: center;
 }
@@ -63,5 +62,13 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+}
+
+button,
+input {
+  &:focus-visible {
+    outline: 4px solid black;
+    outline-offset: 2px;
+  }
 }
 </style>
